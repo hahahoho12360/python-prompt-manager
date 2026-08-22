@@ -418,7 +418,62 @@ def export_markdown(prompts):
                 file.write("\n\n")
 
     print(f"{filename} 파일로 내보냈습니다.")
-    
+
+def edit_prompt(prompts):
+    print("\n=== 프롬프트 수정 ===")
+
+    index = select_prompt(prompts)
+
+    if index is None:
+        return
+
+    prompt = prompts[index]
+
+    print("Enter만 누르면 기존 값을 그대로 사용합니다.")
+
+    title = input(
+        f"제목 [{prompt['title']}]: "
+    ).strip()
+
+    content = input(
+        f"내용 [{prompt['content']}]: "
+    ).strip()
+
+    if title:
+        prompt["title"] = title
+
+    if content:
+        prompt["content"] = content
+
+    change = input(
+        "카테고리를 변경할까요? (y/n): "
+    ).lower()
+
+    if change == "y":
+        prompt["category"] = input_category()
+
+    print("프롬프트를 수정했습니다.")
+
+def delete_prompt(prompts):
+    print("\n=== 프롬프트 삭제 ===")
+
+    index = select_prompt(prompts)
+
+    if index is None:
+        return
+
+    title = prompts[index]["title"]
+
+    answer = input(
+        f'"{title}"을 정말 삭제할까요? (y/n): '
+    ).lower()
+
+    if answer == "y":
+        del prompts[index]
+        print("삭제했습니다.")
+    else:
+        print("삭제를 취소했습니다.")
+        
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -455,6 +510,12 @@ def main():
 
         elif choice == "10":
             export_markdown(prompts)
+
+        elif choice == "11":
+            edit_prompt(prompts)
+
+        elif choice == "12":
+            delete_prompt(prompts)
 
         elif choice == "0":
             print("프로그램을 종료합니다.")
