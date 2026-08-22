@@ -222,6 +222,23 @@ def add_prompt(prompts):
 
     print("프롬프트가 추가되었습니다!")
 
+def prompt_line(index, prompt):
+    star = " ⭐" if prompt["favorite"] else ""
+
+    return f"{index}. [{prompt['category']}] {prompt['title']}{star}"
+
+def show_list(prompts):
+    print("\n=== 프롬프트 목록 ===")
+
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    for i, prompt in enumerate(prompts, start=1):
+        print(prompt_line(i, prompt))
+
+    print(f"\n총 {len(prompts)}개의 프롬프트")
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -232,6 +249,9 @@ def main():
         if choice == "1":
             add_prompt(prompts)
 
+        elif choice == "2":
+            show_list(prompts)
+
         elif choice == "0":
             print("프로그램을 종료합니다.")
             break
@@ -240,4 +260,3 @@ def main():
             print("잘못된 번호입니다. 다시 선택해주세요.")
 if __name__ == "__main__":
     main()
-    
