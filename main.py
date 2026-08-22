@@ -473,7 +473,27 @@ def delete_prompt(prompts):
         print("삭제했습니다.")
     else:
         print("삭제를 취소했습니다.")
-        
+
+def show_top(prompts):
+    print("\n=== 조회수 TOP 목록 ===")
+
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return
+
+    sorted_prompts = sorted(
+        prompts,
+        key=lambda prompt: prompt["view_count"],
+        reverse=True
+    )
+
+    for i, prompt in enumerate(sorted_prompts, start=1):
+        print(
+            f"{i}. {prompt['title']} | "
+            f"{prompt['category']} | "
+            f"조회수 {prompt['view_count']}"
+        )
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -517,6 +537,9 @@ def main():
         elif choice == "12":
             delete_prompt(prompts)
 
+        elif choice == "13":
+            show_top(prompts)
+            
         elif choice == "0":
             print("프로그램을 종료합니다.")
             break
