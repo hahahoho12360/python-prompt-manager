@@ -257,6 +257,29 @@ def show_by_category(prompts):
     for i, prompt in enumerate(results, start=1):
         print(prompt_line(i, prompt))
 
+def search_prompt(prompts):
+    print("\n=== 프롬프트 검색 ===")
+
+    keyword = input_nonempty("검색어: ").lower()
+
+    results = [
+        prompt
+        for prompt in prompts
+        if keyword in prompt["title"].lower()
+        or keyword in prompt["content"].lower()
+    ]
+
+    if not results:
+        print("검색 결과가 없습니다.")
+        return
+
+    print("\n검색 결과:")
+
+    for i, prompt in enumerate(results, start=1):
+        print(prompt_line(i, prompt))
+
+    print(f"\n{len(results)}개의 프롬프트를 찾았습니다.")
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -272,6 +295,9 @@ def main():
 
         elif choice == "3":
             show_by_category(prompts)
+
+        elif choice == "4":
+            search_prompt(prompts)
 
         elif choice == "0":
             print("프로그램을 종료합니다.")
