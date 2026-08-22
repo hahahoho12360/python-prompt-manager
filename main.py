@@ -393,6 +393,32 @@ def load_json(prompts):
     except json.JSONDecodeError:
         print("JSON 파일의 형식이 올바르지 않습니다.")
 
+def export_markdown(prompts):
+    filename = "prompts_by_category.md"
+
+    groups = {}
+
+    for prompt in prompts:
+        category = prompt["category"]
+
+        if category not in groups:
+            groups[category] = []
+
+        groups[category].append(prompt)
+
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write("# 프롬프트 모음\n\n")
+
+        for category, items in groups.items():
+            file.write(f"## {category}\n\n")
+
+            for prompt in items:
+                file.write(f"### {prompt['title']}\n\n")
+                file.write(prompt["content"])
+                file.write("\n\n")
+
+    print(f"{filename} 파일로 내보냈습니다.")
+    
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -426,6 +452,9 @@ def main():
 
         elif choice == "9":
             load_json(prompts)
+
+        elif choice == "10":
+            export_markdown(prompts)
 
         elif choice == "0":
             print("프로그램을 종료합니다.")
