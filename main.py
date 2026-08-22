@@ -327,6 +327,39 @@ def show_detail(prompts):
     print(prompt["content"])
     print("-" * 40)
 
+def manage_favorite(prompts):
+    print("\n=== 즐겨찾기 관리 ===")
+
+    index = select_prompt(prompts)
+
+    if index is None:
+        return
+
+    prompt = prompts[index]
+
+    prompt["favorite"] = not prompt["favorite"]
+
+    if prompt["favorite"]:
+        print("즐겨찾기에 추가했습니다!")
+    else:
+        print("즐겨찾기를 해제했습니다!")
+
+def show_favorites(prompts):
+    print("\n=== 즐겨찾기 목록 ===")
+
+    favorites = [
+        prompt
+        for prompt in prompts
+        if prompt["favorite"]
+    ]
+
+    if not favorites:
+        print("즐겨찾기한 프롬프트가 없습니다.")
+        return
+
+    for i, prompt in enumerate(favorites, start=1):
+        print(prompt_line(i, prompt))
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -349,6 +382,12 @@ def main():
         elif choice == "5":
             show_detail(prompts)
 
+        elif choice == "6":
+            manage_favorite(prompts)
+
+        elif choice == "7":
+            show_favorites(prompts)
+            
         elif choice == "0":
             print("프로그램을 종료합니다.")
             break
