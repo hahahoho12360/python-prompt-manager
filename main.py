@@ -173,6 +173,55 @@ def show_menu():
     print("12. 프롬프트 삭제 (보너스)")
     print("13. 조회수 TOP 목록 (보너스)")
     print("0. 종료")
+
+def input_nonempty(message):
+    while True:
+        value = input(message).strip()
+
+        if value:
+            return value
+
+        print("입력값이 비어 있습니다. 다시 입력해주세요.")
+def input_category():
+    for i, category in enumerate(CATEGORIES, start=1):
+        print(f"{i}) {category}")
+
+    while True:
+        value = input("카테고리 번호 또는 이름: ").strip()
+
+        if not value:
+            print("카테고리를 입력해주세요.")
+            continue
+
+        if value.isdigit():
+            number = int(value)
+
+            if 1 <= number <= len(CATEGORIES):
+                return CATEGORIES[number - 1]
+
+            print("올바른 번호를 입력해주세요.")
+            continue
+
+        return value
+def add_prompt(prompts):
+    print("\n=== 프롬프트 추가 ===")
+
+    title = input_nonempty("제목: ")
+    content = input_nonempty("내용: ")
+    category = input_category()
+
+    prompt = {
+        "title": title,
+        "content": content,
+        "category": category,
+        "favorite": False,
+        "view_count": 0
+    }
+
+    prompts.append(prompt)
+
+    print("프롬프트가 추가되었습니다!")
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -180,10 +229,15 @@ def main():
         show_menu()
         choice = input("선택: ").strip()
 
-        if choice == "0":
+        if choice == "1":
+            add_prompt(prompts)
+
+        elif choice == "0":
             print("프로그램을 종료합니다.")
             break
+
         else:
-            print("잘못된 번호이거나 아직 구현되지 않은 기능입니다.")
+            print("잘못된 번호입니다. 다시 선택해주세요.")
 if __name__ == "__main__":
     main()
+    
