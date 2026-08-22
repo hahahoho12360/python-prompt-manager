@@ -1,3 +1,5 @@
+import json
+
 INITIAL_PROMPTS = [
     {
         "title": "중학생 대상 역사 선생님 AI",
@@ -360,6 +362,37 @@ def show_favorites(prompts):
     for i, prompt in enumerate(favorites, start=1):
         print(prompt_line(i, prompt))
 
+def save_json(prompts):
+    filename = "prompts.json"
+
+    with open(filename, "w", encoding="utf-8") as file:
+        json.dump(
+            prompts,
+            file,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    print(f"{filename} 파일로 저장했습니다.")
+
+def load_json(prompts):
+    filename = "prompts.json"
+
+    try:
+        with open(filename, "r", encoding="utf-8") as file:
+            loaded = json.load(file)
+
+        prompts.clear()
+        prompts.extend(loaded)
+
+        print(f"{filename} 파일에서 불러왔습니다.")
+
+    except FileNotFoundError:
+        print("저장된 JSON 파일이 없습니다.")
+
+    except json.JSONDecodeError:
+        print("JSON 파일의 형식이 올바르지 않습니다.")
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -387,7 +420,13 @@ def main():
 
         elif choice == "7":
             show_favorites(prompts)
-            
+
+        elif choice == "8":
+            save_json(prompts)
+
+        elif choice == "9":
+            load_json(prompts)
+
         elif choice == "0":
             print("프로그램을 종료합니다.")
             break
