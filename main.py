@@ -239,6 +239,24 @@ def show_list(prompts):
 
     print(f"\n총 {len(prompts)}개의 프롬프트")
 
+def show_by_category(prompts):
+    print("\n=== 카테고리별 조회 ===")
+
+    category = input_category()
+
+    results = [
+        prompt
+        for prompt in prompts
+        if prompt["category"] == category
+    ]
+
+    if not results:
+        print(f"[{category}] 카테고리에 프롬프트가 없습니다.")
+        return
+
+    for i, prompt in enumerate(results, start=1):
+        print(prompt_line(i, prompt))
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -251,6 +269,9 @@ def main():
 
         elif choice == "2":
             show_list(prompts)
+
+        elif choice == "3":
+            show_by_category(prompts)
 
         elif choice == "0":
             print("프로그램을 종료합니다.")
