@@ -280,6 +280,53 @@ def search_prompt(prompts):
 
     print(f"\n{len(results)}개의 프롬프트를 찾았습니다.")
 
+def select_prompt(prompts):
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return None
+
+    for i, prompt in enumerate(prompts, start=1):
+        print(prompt_line(i, prompt))
+
+    value = input("프롬프트 번호 입력: ").strip()
+
+    if not value.isdigit():
+        print("올바른 번호를 입력해주세요.")
+        return None
+
+    index = int(value)
+
+    if not 1 <= index <= len(prompts):
+        print("존재하지 않는 번호입니다.")
+        return None
+
+    return index - 1
+
+def show_detail(prompts):
+    print("\n=== 프롬프트 상세 보기 ===")
+
+    index = select_prompt(prompts)
+
+    if index is None:
+        return
+
+    prompt = prompts[index]
+
+    # 보너스 2를 지금 자연스럽게 포함
+    prompt["view_count"] += 1
+
+    star = "⭐" if prompt["favorite"] else "아니오"
+
+    print("-" * 40)
+    print(f"제목: {prompt['title']}")
+    print(f"카테고리: {prompt['category']}")
+    print(f"즐겨찾기: {star}")
+    print(f"조회수: {prompt['view_count']}")
+    print("-" * 40)
+    print("내용:")
+    print(prompt["content"])
+    print("-" * 40)
+
 def main():
     prompts = [prompt.copy() for prompt in INITIAL_PROMPTS]
 
@@ -298,6 +345,9 @@ def main():
 
         elif choice == "4":
             search_prompt(prompts)
+
+        elif choice == "5":
+            show_detail(prompts)
 
         elif choice == "0":
             print("프로그램을 종료합니다.")
